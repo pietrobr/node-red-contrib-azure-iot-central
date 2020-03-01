@@ -1,0 +1,61 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Azure IoT Central',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            scopeid: {value:"0ne000C7916", required: true},
+            deviceid: {value:"real", required: true},
+            primarykey: {value:"+TJNFdkRMD8bBZXyCsGQ9Z41uvMzXOgvcwWenv6g6ak=", required: true},
+            command1: {value:"echo"},  
+            command2: {value:""},  
+            command3: {value:""},  
+            command4: {value:""},  
+            command5: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"Azure IoT Central";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="Azure IoT Central">
+    <div class="form-row">
+        <label for="node-input-scopeid"><i class="icon-tag"></i>Scope ID</label>
+        <input type="text" id="node-input-scopeid" placeholder="Scope ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-deviceid"><i class="icon-tag"></i>Device ID</label>
+        <input type="text" id="node-input-deviceid" placeholder="Device ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-primarykey"><i class="icon-tag"></i>Primary Key</label>
+        <input type="text" id="node-input-primarykey" placeholder="Primary Key">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command1"><i class="icon-tag"></i>Command Name</label>
+        <input type="text" id="node-input-command1" placeholder="Insert the command name of your model interface ">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command2"><i class="icon-tag"></i>Command Name</label>
+        <input type="text" id="node-input-command2" placeholder="Insert the command name of your model interface ">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command3"><i class="icon-tag"></i>Command Name</label>
+        <input type="text" id="node-input-command3" placeholder="Insert the command name of your model interface ">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command4"><i class="icon-tag"></i>Command Name</label>
+        <input type="text" id="node-input-command4" placeholder="Insert the command name of your model interface ">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command5"><i class="icon-tag"></i>Command Name</label>
+        <input type="text" id="node-input-command5" placeholder="Insert the command name of your model interface ">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="Azure IoT Central">
+    <p>A simple node that hels to connect to Azure IoT Central</p>
+</script>

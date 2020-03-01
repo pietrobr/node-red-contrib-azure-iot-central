@@ -1,0 +1,19 @@
+{
+  "name": "red-iot-central",
+  "version": "1.0.0",
+  "description": "Receive Json from previous node, send it to IoT Central.",
+  "dependencies"  : {
+    "azure-iot-device-mqtt"   : "*",
+    "azure-iot-device" : "*",
+    "azure-iot-provisioning-device-mqtt" : "*",
+    "azure-iot-security-symmetric-key" : "*",
+    "azure-iot-provisioning-device" : "*"
+  },
+  "author": "Pietro Brambati",
+  "license": "MIT",
+  "node-red" : {
+    "nodes": {
+        "red-iot-central": "red-iot-central.js"
+    }
+}
+}
