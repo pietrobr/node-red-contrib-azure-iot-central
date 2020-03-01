@@ -1,7 +1,6 @@
 module.exports = function(RED) {
     "use strict";
     
-    
     var iotHubTransport = require('azure-iot-device-mqtt').Mqtt;
     var Client = require('azure-iot-device').Client;
     var Message = require('azure-iot-device').Message;
@@ -92,8 +91,22 @@ module.exports = function(RED) {
             else{
                 node.commands.forEach(command => {
                     if(command != ""){
-                        node.log("Setting onDeviceMethod on command: " + command);
+                        try {
+                            node.log("Setting onDeviceMethod on command: " + command);
                             hubClient.onDeviceMethod(command, flowContext.get(command));
+                        } catch (error) {
+                            let errormessage = `You must add a Java Script node (and run it) with 
+                                myCommand(request, response){
+                                    //your code here
+                                    data = ..;
+                                    response.send(200, data , (err) => {
+                                        ...
+                                    });
+                                };
+                                flow.set('${command}',myCommand);`;
+
+                            node.error(errormessage);
+                        }
                     }
                 });
             }
