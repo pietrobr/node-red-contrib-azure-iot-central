@@ -58,7 +58,7 @@ module.exports = function(RED) {
                 });
                 
             }
-            else {this.log("IoT Central already registered.")}
+            else {this.log("IoT Central already registered.");}
 
             // Now send real data
             if(deviceConnected)
