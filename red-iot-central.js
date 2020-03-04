@@ -155,7 +155,7 @@ module.exports = function(RED) {
                 }
                 node.log(m);
                 external_msg.payload = m;
-                node.send(external_msg.payload)
+                node.send(external_msg);
                 }
               );
         };
@@ -166,11 +166,13 @@ module.exports = function(RED) {
             
             if(gTwin !== null && gTwin !== undefined){
                 node.log("Preparing for sending ...");    
-                gTwin.properties.reported.update(propsToSend, (err) => console.log(`Sent device reported properties: ${JSON.stringify(propsToSend)}; ` +
-                    (err ? `error: ${err.toString()}` : `status: success`)));
-                
-                    external_msg.payload = JSON.stringify(propsToSend);
-                    node.send("Sent reported (device->cloud) properties:" + external_msg)
+                gTwin.properties.reported.update(propsToSend, (err) => 
+                    {
+                        console.log(`Sent device reported properties: ${JSON.stringify(propsToSend)}; ` + (err ? `error: ${err.toString()}` : `status: success`));
+                        external_msg.payload = "Sent reported (device->cloud) properties:" + JSON.stringify(propsToSend);
+                        node.send(external_msg)
+                    }
+                );
             }
             else {
                 node.error("**** twin is null we cannot send properties");
