@@ -154,8 +154,8 @@ module.exports = function(RED) {
                     m = m + `; status: ${res.constructor.name}`
                 }
                 node.log(m);
-                msg.payload = m;
-                node.send(msg)
+                external_msg.payload = m;
+                node.send(external_msg.payload)
                 }
               );
         };
@@ -168,9 +168,12 @@ module.exports = function(RED) {
                 node.log("Preparing for sending ...");    
                 gTwin.properties.reported.update(propsToSend, (err) => console.log(`Sent device reported properties: ${JSON.stringify(propsToSend)}; ` +
                     (err ? `error: ${err.toString()}` : `status: success`)));
+                
+                    external_msg.payload = JSON.stringify(propsToSend);
+                    node.send("Sent reported (device->cloud) properties:" + external_msg)
             }
             else {
-                node.log("**** twin is null we cannot send properties");
+                node.error("**** twin is null we cannot send properties");
             }
         };
 
@@ -179,12 +182,10 @@ module.exports = function(RED) {
              var reportedProps = msg.payload["reported.properties"];
              if(reportedProps){
                  node.log("Received reported properties");
-                 //reportedProps.forEach(prop => {
                     //node.log(`sendToCloud : device twin: ${util.inspect(gTwin)}`);
                     if(gTwin !== null && gTwin !== undefined){
                         this.sendDeviceReportedProperties(reportedProps);
                     } else { node.log("Twin is null. We can not send Reported properties.")}
-                 //});
              }
              else{
                  node.log("received telemetry");
