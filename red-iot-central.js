@@ -24,7 +24,6 @@ module.exports = function(RED) {
         this.deviceid = config.deviceid;
         this.primarykey = config.primarykey;
         this.commands = [config.command1, config.command2,  config.command3, config.command4, config.command5]; 
-        this.properties = [config.property1, config.property2,  config.property3, config.property4, config.property5]; 
 
         hubClient = null;
         
@@ -59,7 +58,6 @@ module.exports = function(RED) {
                         hubClient.open(this.connectCallback2);
                     }
                 });
-                
             }
             else {this.log("IoT Central already registered.");}
 
@@ -88,14 +86,9 @@ module.exports = function(RED) {
                         node.log("Setting Twins");
                         gTwin = twin;
                         //node.log(`device twin: ${util.inspect(Twin)}`);
-                        // Send device properties once on device start up.
-                        /*
-                        var properties = {
-                            state: 'true'
-                        };
-                        sendDeviceProperties(twin, properties);
-                        handleSettings(twin);
-                        */
+                        
+                        this.handleSettings(external_msg);
+
                         //OK now we are connected
                         deviceConnected = true;
 
@@ -204,6 +197,26 @@ module.exports = function(RED) {
                 }
              }
         };
-    }
+
+        this.handleSettings = function handleSettings(msg) {
+            node.log("handling desired properties");
+            
+            gTwin.on('properties.desired', function (desiredChange) {
+                node.log("desired changed!");
+                for (let setting in desiredChange) {
+                    node.log(`Received setting: ${setting}: ${desiredChange[setting].value}`);
+                    if(desiredChange[setting].value != undefined){
+                        var fun = flowContext.get(setting + "-handler");
+                        if(fun !== undefined){
+                            fun(desiredChange[setting].value);
+                            msg.payload = `Set desired prop (Cloud->Device): ${setting}: ${desiredChange[setting].value}`;
+                            node.send(msg);
+                        }
+                    }
+                }
+            });
+        };
+    };
+
     RED.nodes.registerType("Azure IoT Central",IoTCentralConfigNode);
 }
