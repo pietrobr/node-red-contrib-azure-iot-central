@@ -101,11 +101,10 @@ module.exports = function(RED) {
 
                         // sending data for the first time
                         node.log("sending data for the first time ...");
-                        if(external_msg !== null && external_msg !== undefined) 
-                            this.sendToCloud(external_msg);
-                        else{ node.log("... but this.msg is null or undefined");}
-                            }
-                        });
+                        this.sendToCloud(external_msg);
+                        
+                    }
+                });
               }
         };
 
@@ -191,7 +190,18 @@ module.exports = function(RED) {
              }
              else{
                  node.log("received telemetry");
-                 this.sendTelemetry(msg)
+                 if(msg !== null && msg !== undefined 
+                    && msg.payload !== "") 
+                    this.sendTelemetry(msg)
+                else if(msg.payload === "") {
+                    msg.payload = "Connected to IoT Cental; no message sent.";
+                    node.send(msg);
+                }
+                else{ 
+                    node.log("... but this.msg is null or undefined");
+                    msg.payload = "Connected to IoT Cental; message is null.";
+                    node.send(msg);
+                }
              }
         };
     }
