@@ -1,1 +1,1 @@
-[{"id":"4c1c813f.3f716","type":"debug","z":"b1685cb3.8dbd6","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":670,"y":180,"wires":[]}]
+[{"id":"75d8e212.c377dc","type":"Azure IoT Central","z":"b1685cb3.8dbd6","scopeid":"","deviceid":"","primarykey":"","command1":"","command2":"","command3":"","command4":"","command5":"","property1":"brightness","property2":"","property3":"","property4":"","property5":"","transport":"mqtt","x":450,"y":180,"wires":[["4c1c813f.3f716"]]}]
