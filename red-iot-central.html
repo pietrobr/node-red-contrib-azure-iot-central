@@ -15,7 +15,8 @@
             property2: {value:""},
             property3: {value:""},
             property4: {value:""},
-            property5: {value:""}
+            property5: {value:""},
+            transport: {value: "mqtt"}
         },
         inputs:1,
         outputs:1,
@@ -27,6 +28,14 @@
 </script>
 
 <script type="text/html" data-template-name="Azure IoT Central">
+    <div class="form-row">
+        <label data-i18n="node-input-transport">Transport</label>
+        <select id="node-input-transport" style="width:70%;">
+            <option value="mqtt" data-i18n="red-iot-central.mqtt">MQTT</option>
+            <option value="amqp" data-i18n="red-iot-central.amqp">AMQP</option>
+            <option value="https" data-i18n="red-iot-central.https">HTTPS</option>
+        </select>
+    </div>
     <div class="form-row">
         <label for="node-input-scopeid"><i class="icon-tag"></i>Scope ID</label>
         <input type="text" id="node-input-scopeid" placeholder="Scope ID">

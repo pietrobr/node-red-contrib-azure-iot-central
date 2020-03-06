@@ -1,7 +1,7 @@
 module.exports = function(RED) {
     "use strict";
     
-    var iotHubTransport = require('azure-iot-device-mqtt').Mqtt;
+    var iotHubTransport;
     var Client = require('azure-iot-device').Client;
     var Message = require('azure-iot-device').Message;
     var ProvisioningTransport = require('azure-iot-provisioning-device-mqtt').Mqtt;
@@ -24,6 +24,7 @@ module.exports = function(RED) {
         this.deviceid = config.deviceid;
         this.primarykey = config.primarykey;
         this.commands = [config.command1, config.command2,  config.command3, config.command4, config.command5]; 
+        this.transport = config.transport;
 
         hubClient = null;
         
@@ -32,6 +33,15 @@ module.exports = function(RED) {
 
         node.on('input', function(msg) {
             external_msg = msg;
+
+            node.log("Transport:" + node.transport);
+            if(node.transport === "mqtt"){
+                iotHubTransport = require('azure-iot-device-mqtt').Mqtt;
+            } else if(node.transport === "amqp"){
+                iotHubTransport = require('azure-iot-device-amqp').Amqp;
+            } else {
+
+            }
             
             // Register IoT Central with Scope, etc...
             this.log("input received.");
