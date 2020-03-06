@@ -40,7 +40,7 @@ module.exports = function(RED) {
             } else if(node.transport === "amqp"){
                 iotHubTransport = require('azure-iot-device-amqp').Amqp;
             } else {
-
+                iotHubTransport = require('azure-iot-device-http').Http;
             }
             
             // Register IoT Central with Scope, etc...
@@ -84,30 +84,39 @@ module.exports = function(RED) {
               } else {
                 node.log("Device successfully connected to Azure IoT Central");
                 
-                // add callback function
-                this.addCommands();
+                if(node.transport !== "https"){
+                    // add callback function
+                    this.addCommands();
 
-                // Get device twin from Azure IoT Central
-                hubClient.getTwin((err, twin) => {
-                    if (err) {
-                        node.log(`Error getting device twin: ${err.toString()}`);
-                    } else {
-                        //node.log(`device twin: ${util.inspect(twin)}`);
-                        node.log("Setting Twins");
-                        gTwin = twin;
-                        //node.log(`device twin: ${util.inspect(Twin)}`);
-                        
-                        this.handleSettings(external_msg);
+                    // Get device twin from Azure IoT Central
+                    hubClient.getTwin((err, twin) => {
+                        if (err) {
+                            node.log(`Error getting device twin: ${err.toString()}`);
+                        } else {
+                            //node.log(`device twin: ${util.inspect(twin)}`);
+                            node.log("Setting Twins");
+                            gTwin = twin;
+                            //node.log(`device twin: ${util.inspect(Twin)}`);
+                            
+                            this.handleSettings(external_msg);
 
-                        //OK now we are connected
-                        deviceConnected = true;
+                            //OK now we are connected
+                            deviceConnected = true;
 
-                        // sending data for the first time
-                        node.log("sending data for the first time ...");
-                        this.sendToCloud(external_msg);
-                        
-                    }
-                });
+                            // sending data for the first time
+                            node.log("sending data for the first time ...");
+                            this.sendToCloud(external_msg);
+                            
+                        }
+                    });
+                } else {
+                    //OK now we are connected
+                    deviceConnected = true;
+
+                    // sending data for the first time
+                    node.log("sending data in https for the first time ...");
+                    this.sendToCloud(external_msg);
+                }
               }
         };
 

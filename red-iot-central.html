@@ -1,7 +1,7 @@
 <script type="text/javascript">
     RED.nodes.registerType('Azure IoT Central',{
         category: 'function',
-        color: '#007fff',
+        color: '#0072C6',
         defaults: {
             scopeid: {value:"", required: true},
             deviceid: {value:"", required: true},
@@ -20,7 +20,7 @@
         },
         inputs:1,
         outputs:1,
-        icon: "bridge.png",
+        icon: "iot-central.png",
         label: function() {
             return this.name||"Azure IoT Central";
         }
