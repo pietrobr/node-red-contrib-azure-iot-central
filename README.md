@@ -11,7 +11,7 @@ Commands from IoT Central (up to 5 ) to the device. For this scenario you have t
 
 Here is the 'echo' command:
 
-![step0](https://github.com/pietrobr/node-red-contrib-azure-iot-central/tree/master/media/command-0.JPG)
+![step0](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/command-0.JPG?raw=true)
 
 Here the Javascript node in the flow:
 
