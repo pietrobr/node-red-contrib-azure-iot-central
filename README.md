@@ -15,11 +15,11 @@ Here is the 'echo' command:
 
 Here the Javascript node in the flow:
 
-![step1](media/command-1.JPG)
+![step1](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/command-1.JPG?raw=true)
 
 The Javascript function must be registered at the flow context and invoked before calling the connector. In the sample a simple inject is used to register the function, but you can do in other ways. 
 
-![step2](media/command-2.JPG)
+![step2](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/command-2.JPG?raw=true)
 
 Here a template of Javascript code:
 
@@ -59,9 +59,9 @@ To react to a desired properties you have to register a Javascript function at t
 
 Here we are registering the Javscript function using a simple inject node, but you can use other ways.
 
-![step3](media/desired-0.JPG)
+![step3](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/desired-0.JPG?raw=true)
 
-![step4](media/desired-1.JPG)
+![step4](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/desired-1.JPG?raw=true)
 
 This is a sample Javascript code used for the brightness properties, the value of the property is stored using the flow context.
 
