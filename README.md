@@ -11,7 +11,7 @@ Commands from IoT Central (up to 5 ) to the device. For this scenario you have t
 
 Here is the 'echo' command:
 
-![step0](media/command-0.JPG)
+![step0](https://github.com/pietrobr/node-red-contrib-azure-iot-central/tree/master/media/command-0.JPG)
 
 Here the Javascript node in the flow:
 
@@ -95,4 +95,8 @@ If you want to sent a reported property create a json object that containe "resp
 
     npm install node-red-contrib-azure-iot-central
 
+This connector hass been written starting using this [sample code][2].
+
 [1]:https://docs.microsoft.com/en-us/azure/iot-central/core/concepts-get-connected#connect-a-single-device
+[2]:https://docs.microsoft.com/it-it/azure/iot-central/core/tutorial-connect-device
+

@@ -1,7 +1,7 @@
 {
-  "name": "red-iot-central",
+  "name": "node-red-contrib-azure-iot-central",
   "version": "1.0.0",
-  "description": "Receive Json from previous node, send it to IoT Central.",
+  "description": "Receive Json from previous node, send it to IoT Central provisioned device (Scope ID, Device ID, SAS Key). Supports mqtt, amqp, http. Supports commands, reported and desired properties.",
   "dependencies": {
     "azure-iot-device-mqtt": "*",
     "azure-iot-device-amqp": "*",
@@ -13,6 +13,10 @@
   },
   "author": "Pietro Brambati",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pietrobr/node-red-contrib-azure-iot-central.git"
+  },
   "node-red": {
     "nodes": {
       "red-iot-central": "red-iot-central.js"
