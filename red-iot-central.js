@@ -60,12 +60,16 @@ module.exports = function(RED) {
                     if (err) {
                         this.log('Error registering device: ' + err);
                     } else {
-                        node.log('Registration succeeded');
-                        node.log('Assigned hub=' + result.assignedHub);
-                        node.log('DeviceId=' + result.deviceId);
-                        var connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ';SharedAccessKey=' + symmetricKey;
-                        hubClient = Client.fromConnectionString(connectionString, iotHubTransport);
-                        hubClient.open(this.connectCallback2);
+                        try {
+                            node.log('Registration succeeded');
+                            node.log('Assigned hub=' + result.assignedHub);
+                            node.log('DeviceId=' + result.deviceId);
+                            var connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ';SharedAccessKey=' + symmetricKey;
+                            hubClient = Client.fromConnectionString(connectionString, iotHubTransport);
+                            hubClient.open(this.connectCallback2);
+                        } catch (error) {
+                            node.log("Erro open the client connectio: " + error.message)
+                        }
                     }
                 });
             }
@@ -85,7 +89,7 @@ module.exports = function(RED) {
                 node.log("Device successfully connected to Azure IoT Central");
                 
                 if(node.transport !== "https"){
-                    // add callback function
+                    // add callback function for commands
                     this.addCommands();
 
                     // Get device twin from Azure IoT Central
@@ -93,31 +97,27 @@ module.exports = function(RED) {
                         if (err) {
                             node.log(`Error getting device twin: ${err.toString()}`);
                         } else {
-                            //node.log(`device twin: ${util.inspect(twin)}`);
                             node.log("Setting Twins");
                             gTwin = twin;
-                            //node.log(`device twin: ${util.inspect(Twin)}`);
                             
                             this.handleSettings(external_msg);
 
-                            //OK now we are connected
-                            deviceConnected = true;
-
-                            // sending data for the first time
-                            node.log("sending data for the first time ...");
-                            this.sendToCloud(external_msg);
-                            
+                            this.setConnectedAndSendToCloud();
                         }
                     });
                 } else {
-                    //OK now we are connected
-                    deviceConnected = true;
-
-                    // sending data for the first time
-                    node.log("sending data in https for the first time ...");
-                    this.sendToCloud(external_msg);
+                    this.setConnectedAndSendToCloud();
                 }
               }
+        };
+
+        this.setConnectedAndSendToCloud = function() {
+            //OK now we are connected
+            deviceConnected = true;
+
+            // sending data for the first time
+            node.log("sending data in https for the first time ...");
+            this.sendToCloud(external_msg);
         };
 
         this.addCommands = function(){
@@ -154,6 +154,7 @@ module.exports = function(RED) {
             var message = new Message(data);
             message.contentType = "application/json";
             message.contentEncoding = "utf-8";
+            node.log ("Sending telemetry ...");
             hubClient.sendEvent(message, (err, res) => { 
                 var m = `Sent message: ${message.getData()}`;
                 if(err)
