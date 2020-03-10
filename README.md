@@ -24,8 +24,8 @@ The Javascript function must be registered at the flow context and invoked befor
 Here a template of Javascript code:
 
 ```javascript
-// Create a command with the same name 'echo' used
-// in Azure IoT Central model of the device
+// This script create a command with the same name 'echo' 
+// used in Azure IoT Central model of the device.
 if(flow.get('echo')){
     return;   
 }
@@ -66,8 +66,8 @@ Here we are registering the Javscript function using a simple inject node, but y
 This is a sample Javascript code used for the brightness properties, the value of the property is stored using the flow context.
 
 ```javascript
-// this is a property written in IoT Central
-// It'a a desired property for the device twin
+// This is a property set in IoT Central.
+// It's a desired property for the device twin.
 function brightness(newValue)
 {
     node.log("received desired prop from cloud:" + newValue);
@@ -95,7 +95,7 @@ If you want to sent a reported property create a json object that containe "resp
 
     npm install node-red-contrib-azure-iot-central
 
-This connector hass been written starting using this [sample code][2].
+This connector has been written starting using this [sample code][2].
 
 [1]:https://docs.microsoft.com/en-us/azure/iot-central/core/concepts-get-connected#connect-a-single-device
 [2]:https://docs.microsoft.com/it-it/azure/iot-central/core/tutorial-connect-device

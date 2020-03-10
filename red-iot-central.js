@@ -13,6 +13,7 @@ module.exports = function(RED) {
     var registrationId ;
     var symmetricKey ;
     var deviceConnected;
+    var deviceRegistering = false;
     var util = require('util');
     var external_msg;
 
@@ -47,7 +48,8 @@ module.exports = function(RED) {
             this.log("input received.");
             deviceConnected= (hubClient != null);
 
-            if(!deviceConnected){
+            if(!deviceConnected && !deviceRegistering ){
+                deviceRegistering = true;
                 var provisioningHost = 'global.azure-devices-provisioning.net';
                 var idScope = node.scopeid;
                 var registrationId = node.deviceid;
@@ -73,10 +75,10 @@ module.exports = function(RED) {
                     }
                 });
             }
-            else {this.log("IoT Central already registered.");}
+            else {this.log("IoT Central already registered or registering.");}
 
             // Now send real data (telemetry or properties)
-            if(deviceConnected)
+            if(deviceConnected && !deviceRegistering)
             {
                 this.sendToCloud(msg);
             }
@@ -114,6 +116,7 @@ module.exports = function(RED) {
         this.setConnectedAndSendToCloud = function() {
             //OK now we are connected
             deviceConnected = true;
+            deviceRegistering = false;
 
             // sending data for the first time
             node.log("sending data in https for the first time ...");
@@ -166,6 +169,7 @@ module.exports = function(RED) {
                     m = m + `; status: ${res.constructor.name}`
                 }
                 node.log(m);
+                node.log ("... sent.");
                 external_msg.payload = m;
                 node.send(external_msg);
                 }
