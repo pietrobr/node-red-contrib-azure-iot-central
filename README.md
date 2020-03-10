@@ -65,6 +65,8 @@ Here we are registering the Javscript function using a simple inject node, but y
 
 This is a sample Javascript code used for the brightness properties, the value of the property is stored using the flow context.
 
+*Important*: the name of the handler of the desired property must be in the format as propertyname-handler as in the code below.
+
 ```javascript
 // This is a property set in IoT Central.
 // It's a desired property for the device twin.

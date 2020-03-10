@@ -84,6 +84,14 @@ module.exports = function(RED) {
             }
         });
 
+        this.on('close', function() {
+            if(hubClient){
+                hubClient.close();
+                hubClient = null;
+            }
+            node.log("Close event raised.");
+        });
+
         this.connectCallback2 = (err) => {
             if (err) {
                 node.log("Device could not connect to Azure IoT Central: ${err.toString()}");
