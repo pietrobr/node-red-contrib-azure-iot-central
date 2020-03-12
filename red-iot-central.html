@@ -18,14 +18,35 @@
             property5: {value:""},
             transport: {value: "mqtt"},
             auth: {value: "sas"},
-            certfile: {value: "aaa"},
-            certkeyfile: {value: ""}
+            certfile: {value: "", required: true},
+            certkeyfile: {value: "", required: true}
         },
         inputs:1,
         outputs:1,
         icon: "iot-central.png",
         label: function() {
             return this.name||"Azure IoT Central";
+        },
+        oneditprepare: function() {
+
+            function toglecertfilesinput(){
+                if ($('#node-input-auth').val() === 'sas') {
+                    $(".form-row-certfile").hide();
+                    $(".form-row-certkeyfile").hide();
+                    $(".form-row-primarykey").show();
+                }
+                else{
+                    $(".form-row-certfile").show();
+                    $(".form-row-certkeyfile").show();
+                    $(".form-row-primarykey").hide();
+                }
+            };
+
+            toglecertfilesinput();
+
+            $('#node-input-auth').on("change", function() {
+                toglecertfilesinput();
+            });
         }
     });
 </script>
@@ -46,11 +67,11 @@
             <option value="x509" data-i18n="red-iot-central.x509">X 509</option>
         </select>
     </div>
-    <div class="form-row">
+    <div class="form-row form-row-certfile">
         <label for="node-input-certfile"><i class="icon-tag"></i>Device Cert File</label>
         <input type="text" id="node-input-certfile" placeholder="Device Cert file (.pem)">
     </div>
-    <div class="form-row">
+    <div class="form-row form-row-certkeyfile">
         <label for="node-input-certkeyfile"><i class="icon-tag"></i>Device Cert Key File</label>
         <input type="text" id="node-input-certkeyfile" placeholder="Device Cert key file (.pem)">
     </div>
@@ -62,7 +83,7 @@
         <label for="node-input-deviceid"><i class="icon-tag"></i>Device ID</label>
         <input type="text" id="node-input-deviceid" placeholder="Device ID">
     </div>
-    <div class="form-row">
+    <div class="form-row form-row-primarykey">
         <label for="node-input-primarykey"><i class="icon-tag"></i>Primary Key</label>
         <input type="text" id="node-input-primarykey" placeholder="Primary Key">
     </div>
