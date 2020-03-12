@@ -1,5 +1,5 @@
 # Node-Red Azure IoT Central connector 
-This connector allows you easily connect your node red project to Azure IoT Central, providing the Scope ID, Device ID and Primary Key created in Azure IoT Central portal for a specific Device unsing SAS connectivity. See [here][1] for more details.
+This connector allows you easily connect your node red project to Azure IoT Central, providing the Scope ID, Device ID and Primary Key created in Azure IoT Central portal for a specific Device unsing SAS or X509 certificates. See [here][1] for more details.
 
 This connector supports MQTT, AMQP, HTTP as transport. 
 
@@ -96,6 +96,16 @@ If you want to sent a reported property create a json object that containe "resp
 ## Install
 
     npm install node-red-contrib-azure-iot-central
+
+
+## Authenticating using SAS
+To use SAS simply go the IoT Central and get the connection details (Id scope, device id and primary key) as below:
+
+![step5](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/auth-sas-0.JPG?raw=true)
+
+Now paste those values in the properties pane of the IoT Central Node:
+
+![step6](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/auth-sas-1.JPG?raw=true)
 
 This connector has been written starting using this [sample code][2].
 
