@@ -107,8 +107,19 @@ Now paste those values in the properties pane of the IoT Central Node:
 
 ![step6](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/auth-sas-1.JPG?raw=true)
 
+## Authenticating using X.509 certificates
+This connector support the use of X.509 certificates. To use those, you first have to add CA Root Certificcate to Azure IoT Central. Please go [here][3] for more details.
+For a full sample on how to generate a sample CA Root Certificate, Leaf Certificate and a device certificate, you can visit this [link][4] where you can also find a sample python code to test it.
+Once you have configurated the IoT Cental and have the subject-cert.pem and the subject-private-key.pem, you can reference them in propoterty pane:
+
+![step6](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/auth-sasx509-0.JPG?raw=true)
+
+
+## Credits
+
 This connector has been written starting using this [sample code][2].
 
 [1]:https://docs.microsoft.com/en-us/azure/iot-central/core/concepts-get-connected#connect-a-single-device
 [2]:https://docs.microsoft.com/it-it/azure/iot-central/core/tutorial-connect-device
-
+[3]:https://docs.microsoft.com/en-us/azure/iot-central/core/concepts-get-connected#connect-devices-using-x509-certificates
+[4]:https://github.com/Azure/dps-certgen/tree/master/samples/python

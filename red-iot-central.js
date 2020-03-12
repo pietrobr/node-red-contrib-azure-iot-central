@@ -67,7 +67,6 @@ module.exports = function(RED) {
                 }
             } 
             
-            // Register IoT Central with Scope, etc...
             node.log("input received.");
             
             deviceConnected= (hubClient != null);
@@ -99,7 +98,6 @@ module.exports = function(RED) {
                     if (err) {
                         this.resetConnectionsStatusToOrigin();
                         node.error('Error registering device: ' + err);
-                        //node.send();
                     } else {
                         try {
                             node.log('Registration succeeded');
@@ -120,7 +118,6 @@ module.exports = function(RED) {
                             hubClient.open(this.connectCallback2);
                         } catch (error) {
                             node.log("Error open the client connection: " + error.message);
-                            //node.send();
                         }
                     }
                 });
@@ -128,13 +125,11 @@ module.exports = function(RED) {
                 } catch (error) {
                     this.resetConnectionsStatusToOrigin();
                     node.error('Error in register: ' + error.message);
-                    //node.send();
                 }
                 
             }
             else {node.log("IoT Central already registered or registering.");}
 
-            // Now send real data (telemetry or properties)
             if(deviceConnected && !deviceRegistering)
             {
                 this.sendToCloud(msg);
@@ -162,10 +157,8 @@ module.exports = function(RED) {
                 node.log("Device successfully connected to Azure IoT Central");
                 
                 if(node.transport !== "https"){
-                    // add callback function for commands
                     this.addCommands();
 
-                    // Get device twin from Azure IoT Central
                     hubClient.getTwin((err, twin) => {
                         if (err) {
                             node.log(`Error getting device twin: ${err.toString()}`);
@@ -185,11 +178,9 @@ module.exports = function(RED) {
         };
 
         this.setConnectedAndSendToCloud = function() {
-            //OK now we are connected
             deviceConnected = true;
             deviceRegistering = false;
 
-            // sending data for the first time
             node.log("sending data in https for the first time ...");
             this.sendToCloud(external_msg);
         };
@@ -267,11 +258,9 @@ module.exports = function(RED) {
         };
 
         this.sendToCloud = function sendToCloud(msg){
-             //check if we need to send reported properties
              var reportedProps = msg.payload["reported.properties"];
              if(reportedProps){
                  node.log("Received reported properties");
-                    //node.log(`sendToCloud : device twin: ${util.inspect(gTwin)}`);
                     if(gTwin !== null && gTwin !== undefined){
                         this.sendDeviceReportedProperties(reportedProps);
                     } else { node.log("Twin is null. We can not send Reported properties.")}
