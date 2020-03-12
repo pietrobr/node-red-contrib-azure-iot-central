@@ -6,6 +6,7 @@ module.exports = function(RED) {
     var Message = require('azure-iot-device').Message;
     var ProvisioningTransport = require('azure-iot-provisioning-device-mqtt').Mqtt;
     var SymmetricKeySecurityClient = require('azure-iot-security-symmetric-key').SymmetricKeySecurityClient;
+    var X509Security = require('azure-iot-security-x509').X509Security;
     var ProvisioningDeviceClient = require('azure-iot-provisioning-device').ProvisioningDeviceClient;
     var hubClient;
     var gTwin = null;
@@ -16,6 +17,8 @@ module.exports = function(RED) {
     var deviceRegistering = false;
     var util = require('util');
     var external_msg;
+    var auth;
+    var cert2;
 
     function IoTCentralConfigNode(config) {
         RED.nodes.createNode(this,config);
@@ -26,6 +29,9 @@ module.exports = function(RED) {
         this.primarykey = config.primarykey;
         this.commands = [config.command1, config.command2,  config.command3, config.command4, config.command5]; 
         this.transport = config.transport;
+        this.auth = config.auth;
+        this.certfile = config.certfile;
+        this.certkeyfile = config.certkeyfile;
 
         hubClient = null;
         
@@ -33,6 +39,7 @@ module.exports = function(RED) {
         var flowContext = this.context().flow;
 
         node.on('input', function(msg) {
+            
             external_msg = msg;
 
             node.log("Transport:" + node.transport);
@@ -43,10 +50,30 @@ module.exports = function(RED) {
             } else {
                 iotHubTransport = require('azure-iot-device-http').Http;
             }
+
+            node.log("Auth:" + node.auth);
+            const fs = require('fs')
+            if(node.auth === "x509"){
+                if (!fs.existsSync(node.certfile) || !fs.existsSync(node.certkeyfile)) {
+                    node.error("When using X509 you must specify a device certificate and private key file.");
+                    node.send();
+                    return;
+                }
+                else{
+                    cert2 = {
+                        cert : fs.readFileSync(node.certfile, 'utf-8').toString(),
+                        key : fs.readFileSync(node.certkeyfile, 'utf-8').toString()
+                    };
+                }
+            } 
             
             // Register IoT Central with Scope, etc...
-            this.log("input received.");
+            node.log("input received.");
+            
             deviceConnected= (hubClient != null);
+
+            node.log("deviceConnected: " + deviceConnected);
+            node.log("deviceRegistering: " + deviceRegistering);
 
             if(!deviceConnected && !deviceRegistering ){
                 deviceRegistering = true;
@@ -54,28 +81,58 @@ module.exports = function(RED) {
                 var idScope = node.scopeid;
                 var registrationId = node.deviceid;
                 var symmetricKey = node.primarykey;
-                var provisioningSecurityClient = new SymmetricKeySecurityClient(registrationId, symmetricKey);
+                
+                var provisioningSecurityClient;
+                if(node.auth === "x509"){
+                    provisioningSecurityClient = new X509Security(registrationId, cert2);
+                }
+                else{
+                    provisioningSecurityClient = new SymmetricKeySecurityClient(registrationId, symmetricKey);
+                }
+                
+                node.log("IoT Central registering: "+ idScope + " , " + registrationId);
+
                 var provisioningClient = ProvisioningDeviceClient.create(provisioningHost, idScope, new ProvisioningTransport(), provisioningSecurityClient);
                 
-                this.log("IoT Central registering: "+ idScope + " , " + registrationId + " , " + symmetricKey)
-                provisioningClient.register((err, result) => {
+                try {
+                    provisioningClient.register((err, result) => {
                     if (err) {
-                        this.log('Error registering device: ' + err);
+                        this.resetConnectionsStatusToOrigin();
+                        node.error('Error registering device: ' + err);
+                        //node.send();
                     } else {
                         try {
                             node.log('Registration succeeded');
                             node.log('Assigned hub=' + result.assignedHub);
                             node.log('DeviceId=' + result.deviceId);
-                            var connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ';SharedAccessKey=' + symmetricKey;
+                            
+                            var connectionString;
+                            if(node.auth === "x509"){
+                                connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ";x509=true" ;
+                            }
+                            else{
+                                connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ';SharedAccessKey=' + symmetricKey;
+                            }
+                            node.log(connectionString);
+                            
                             hubClient = Client.fromConnectionString(connectionString, iotHubTransport);
+                            if(node.auth === "x509") hubClient.setOptions(cert2);
                             hubClient.open(this.connectCallback2);
                         } catch (error) {
-                            node.log("Erro open the client connectio: " + error.message)
+                            node.log("Error open the client connection: " + error.message);
+                            //node.send();
                         }
                     }
                 });
+                    
+                } catch (error) {
+                    this.resetConnectionsStatusToOrigin();
+                    node.error('Error in register: ' + error.message);
+                    //node.send();
+                }
+                
             }
-            else {this.log("IoT Central already registered or registering.");}
+            else {node.log("IoT Central already registered or registering.");}
 
             // Now send real data (telemetry or properties)
             if(deviceConnected && !deviceRegistering)
@@ -84,12 +141,18 @@ module.exports = function(RED) {
             }
         });
 
+        this.resetConnectionsStatusToOrigin = function(){
+            deviceRegistering = false;
+            deviceConnected = false;
+            hubClient = null;
+        };
+
         this.on('close', function() {
+            node.log("Close event raised.");
             if(hubClient){
                 hubClient.close();
                 hubClient = null;
             }
-            node.log("Close event raised.");
         });
 
         this.connectCallback2 = (err) => {

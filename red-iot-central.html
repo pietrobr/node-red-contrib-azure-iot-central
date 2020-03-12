@@ -16,7 +16,10 @@
             property3: {value:""},
             property4: {value:""},
             property5: {value:""},
-            transport: {value: "mqtt"}
+            transport: {value: "mqtt"},
+            auth: {value: "sas"},
+            certfile: {value: "aaa"},
+            certkeyfile: {value: ""}
         },
         inputs:1,
         outputs:1,
@@ -35,6 +38,21 @@
             <option value="amqp" data-i18n="red-iot-central.amqp">AMQP</option>
             <option value="https" data-i18n="red-iot-central.https">HTTPS</option>
         </select>
+    </div>
+    <div class="form-row">
+        <label data-i18n="node-input-auth">Authentication</label>
+        <select id="node-input-auth" style="width:70%;">
+            <option value="sas" data-i18n="red-iot-central.sas">SAS</option>
+            <option value="x509" data-i18n="red-iot-central.x509">X 509</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-certfile"><i class="icon-tag"></i>Device Cert File</label>
+        <input type="text" id="node-input-certfile" placeholder="Device Cert file (.pem)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-certkeyfile"><i class="icon-tag"></i>Device Cert Key File</label>
+        <input type="text" id="node-input-certkeyfile" placeholder="Device Cert key file (.pem)">
     </div>
     <div class="form-row">
         <label for="node-input-scopeid"><i class="icon-tag"></i>Scope ID</label>
