@@ -19,7 +19,10 @@
             transport: {value: "mqtt"},
             auth: {value: "sas"},
             certfile: {value: "", required: true},
-            certkeyfile: {value: "", required: true}
+            certkeyfile: {value: "", required: true},
+            certfilei: {value: "", required: false},
+            certkeyfilei: {value: "", required: false},
+            passwordi: {value: "", required: false}
         },
         inputs:1,
         outputs:1,
@@ -34,10 +37,12 @@
                     $(".form-row-certfile").hide();
                     $(".form-row-certkeyfile").hide();
                     $(".form-row-primarykey").show();
+                    $(".form-row-passwordi").show();
                 }
                 else{
                     $(".form-row-certfile").show();
                     $(".form-row-certkeyfile").show();
+                    $(".form-row-passwordi").show();
                     $(".form-row-primarykey").hide();
                 }
             };
@@ -64,7 +69,7 @@
         <label data-i18n="node-input-auth">Authentication</label>
         <select id="node-input-auth" style="width:70%;">
             <option value="sas" data-i18n="red-iot-central.sas">SAS</option>
-            <option value="x509" data-i18n="red-iot-central.x509">X 509</option>
+            <option value="x509" data-i18n="red-iot-central.x509">X.509</option>
         </select>
     </div>
     <div class="form-row form-row-certfile">
@@ -74,6 +79,10 @@
     <div class="form-row form-row-certkeyfile">
         <label for="node-input-certkeyfile"><i class="icon-tag"></i>Device Cert Key File</label>
         <input type="text" id="node-input-certkeyfile" placeholder="Device Cert key file (.pem)">
+    </div>
+    <div class="form-row form-row-passwordi">
+        <label for="node-input-passwordi"><i class="icon-tag"></i>Password</label>
+        <input type="text" id="node-input-passwordi" placeholder="Password">
     </div>
     <div class="form-row">
         <label for="node-input-scopeid"><i class="icon-tag"></i>Scope ID</label>

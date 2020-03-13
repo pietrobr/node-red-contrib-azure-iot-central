@@ -110,7 +110,7 @@ Now paste those values in the properties pane of the IoT Central Node:
 ## Authenticating using X.509 certificates
 This connector support the use of X.509 certificates. To use those, you first have to add CA Root Certificcate to Azure IoT Central. Please go [here][3] for more details.
 For a full sample on how to generate a sample CA Root Certificate, Leaf Certificate and a device certificate, you can visit this [link][4] where you can also find a sample python code to test it.
-Once you have configurated the IoT Cental and have the subject-cert.pem and the subject-private-key.pem, you can reference them in propoterty pane:
+Once you have configurated the IoT Cental and have the subject-cert.pem (your device certificate) and the subject-private-key.pem (private key), you can reference them in propoterty pane:
 
 ![step6](https://github.com/pietrobr/node-red-contrib-azure-iot-central/blob/master/media/auth-x509-0.JPG?raw=true)
 

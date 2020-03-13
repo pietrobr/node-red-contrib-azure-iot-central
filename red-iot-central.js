@@ -32,6 +32,7 @@ module.exports = function(RED) {
         this.auth = config.auth;
         this.certfile = config.certfile;
         this.certkeyfile = config.certkeyfile;
+        this.passwordi = config.passwordi;
 
         hubClient = null;
         
@@ -62,7 +63,8 @@ module.exports = function(RED) {
                 else{
                     cert2 = {
                         cert : fs.readFileSync(node.certfile, 'utf-8').toString(),
-                        key : fs.readFileSync(node.certkeyfile, 'utf-8').toString()
+                        key : fs.readFileSync(node.certkeyfile, 'utf-8').toString(),
+                        passphrase: node.passwordi
                     };
                 }
             } 
@@ -74,7 +76,7 @@ module.exports = function(RED) {
             node.log("deviceConnected: " + deviceConnected);
             node.log("deviceRegistering: " + deviceRegistering);
 
-            if(!deviceConnected && !deviceRegistering ){
+            if (!deviceConnected && !deviceRegistering ){
                 deviceRegistering = true;
                 var provisioningHost = 'global.azure-devices-provisioning.net';
                 var idScope = node.scopeid;
@@ -82,10 +84,10 @@ module.exports = function(RED) {
                 var symmetricKey = node.primarykey;
                 
                 var provisioningSecurityClient;
-                if(node.auth === "x509"){
+                if (node.auth === "x509"){
                     provisioningSecurityClient = new X509Security(registrationId, cert2);
                 }
-                else{
+                else {
                     provisioningSecurityClient = new SymmetricKeySecurityClient(registrationId, symmetricKey);
                 }
                 
@@ -121,7 +123,6 @@ module.exports = function(RED) {
                         }
                     }
                 });
-                    
                 } catch (error) {
                     this.resetConnectionsStatusToOrigin();
                     node.error('Error in register: ' + error.message);
@@ -130,7 +131,7 @@ module.exports = function(RED) {
             }
             else {node.log("IoT Central already registered or registering.");}
 
-            if(deviceConnected && !deviceRegistering)
+            if (deviceConnected && !deviceRegistering)
             {
                 this.sendToCloud(msg);
             }
