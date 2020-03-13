@@ -5,7 +5,7 @@
         defaults: {
             scopeid: {value:"", required: true},
             deviceid: {value:"", required: true},
-            primarykey: {value:"", required: true},
+            primarykey: {value:"", required: false},
             command1: {value:""},  
             command2: {value:""},  
             command3: {value:""},  
@@ -18,10 +18,9 @@
             property5: {value:""},
             transport: {value: "mqtt"},
             auth: {value: "sas"},
-            certfile: {value: "", required: true},
-            certkeyfile: {value: "", required: true},
-            certfilei: {value: "", required: false},
-            certkeyfilei: {value: "", required: false},
+            //certfile: {value: "",  validate:RED.validators.regex(/pem$/)},
+            certfile: {value: "",  required: false},
+            certkeyfile: {value: "", required: false},
             passwordi: {value: "", required: false}
         },
         inputs:1,
@@ -37,7 +36,7 @@
                     $(".form-row-certfile").hide();
                     $(".form-row-certkeyfile").hide();
                     $(".form-row-primarykey").show();
-                    $(".form-row-passwordi").show();
+                    $(".form-row-passwordi").hide();
                 }
                 else{
                     $(".form-row-certfile").show();

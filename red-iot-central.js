@@ -53,12 +53,17 @@ module.exports = function(RED) {
             }
 
             node.log("Auth:" + node.auth);
-            const fs = require('fs')
+            const fs = require('fs');
+            const path = require('path');
+
             if(node.auth === "x509"){
                 if (!fs.existsSync(node.certfile) || !fs.existsSync(node.certkeyfile)) {
                     node.error("When using X509 you must specify a device certificate and private key file.");
                     node.send();
-                    return;
+                }
+                else if (path.extname(node.certfile) !== ".pem" || path.extname(node.certkeyfile) !== ".pem") {
+                    node.error("You need to use PEM certificates.");
+                    node.send();
                 }
                 else{
                     cert2 = {
