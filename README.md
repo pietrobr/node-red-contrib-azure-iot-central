@@ -1,4 +1,4 @@
-# Node-Red Azure IoT Central connector 
+# Node-RED Azure IoT Central connector 
 This connector allows you easily connect your node red project to Azure IoT Central, providing the Scope ID, Device ID and Primary Key created in Azure IoT Central portal for a specific Device unsing SAS or X509 certificates. See [here][1] for more details.
 
 This connector supports MQTT, AMQP, HTTP as transport. 
