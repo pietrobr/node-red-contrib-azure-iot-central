@@ -1,0 +1,82 @@
+{
+  "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_3dq:3",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_3dq:orcfdxwyn:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "Interface"
+      },
+      "name": "RaspberryWithSenseHAT_5de",
+      "schema": {
+        "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:3",
+        "@type": "Interface",
+        "displayName": {
+          "en": "Interface"
+        },
+        "contents": [
+          {
+            "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:temperature:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Temperature"
+            ],
+            "displayName": {
+              "en": "temperature"
+            },
+            "name": "temperature",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:humidity:2",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Humidity"
+            ],
+            "displayName": {
+              "en": "humidity"
+            },
+            "name": "humidity",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:pressure:2",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "pressure"
+            },
+            "name": "pressure",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:turnLedOn:3",
+            "@type": "Command",
+            "commandType": "asynchronous",
+            "durable": false,
+            "displayName": {
+              "en": "turnLedOn"
+            },
+            "name": "turnLedOn"
+          },
+          {
+            "@id": "urn:nodeRedRaspberrySenseHat:RaspberryWithSenseHAT_5de:turnLedOff:3",
+            "@type": "Command",
+            "commandType": "asynchronous",
+            "durable": false,
+            "displayName": {
+              "en": "turnLedOff"
+            },
+            "name": "turnLedOff"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "RaspberryWithSenseHAT"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}
