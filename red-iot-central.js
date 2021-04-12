@@ -294,12 +294,12 @@ module.exports = function(RED) {
             gTwin.on('properties.desired', function (desiredChange) {
                 node.log("desired changed!");
                 for (let setting in desiredChange) {
-                    node.log(`Received setting: ${setting}: ${desiredChange[setting].value}`);
-                    if(desiredChange[setting].value != undefined){
+                    node.log(`Received desired: ${setting}: ${desiredChange[setting]}`);
+                    if(desiredChange[setting] != undefined){
                         var fun = flowContext.get(setting + "-handler");
                         if(fun !== undefined){
-                            fun(desiredChange[setting].value);
-                            msg.payload = `Set desired prop (Cloud->Device): ${setting}: ${desiredChange[setting].value}`;
+                            fun(desiredChange[setting]);
+                            msg.payload = `Set desired prop (Cloud->Device): ${setting}: ${desiredChange[setting]}`;
                             node.send(msg);
                         }
                     }
