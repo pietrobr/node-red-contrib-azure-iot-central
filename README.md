@@ -79,7 +79,7 @@ function brightness(newValue)
 flow.set('brightness-handler',brightness);
 ```
 
-If you want to send a reported property create a json object that containe "reported.properties" field as follow.
+If you want to send a reported property create a json object that contain "reported.properties" field as follow.
 
 ```json
 {
