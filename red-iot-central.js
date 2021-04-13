@@ -293,16 +293,49 @@ module.exports = function(RED) {
             
             gTwin.on('properties.desired', function (desiredChange) {
                 node.log("desired changed!");
+                var patchVersion = "1";
+                var patchValue ="";
+                var patchKey ="";
                 for (let setting in desiredChange) {
                     node.log(`Received desired: ${setting}: ${desiredChange[setting]}`);
                     if(desiredChange[setting] != undefined){
-                        var fun = flowContext.get(setting + "-handler");
-                        if(fun !== undefined){
-                            fun(desiredChange[setting]);
-                            msg.payload = `Set desired prop (Cloud->Device): ${setting}: ${desiredChange[setting]}`;
-                            node.send(msg);
+                        if(setting === "$version" )
+                        {
+                            patchVersion = desiredChange[setting];
+                        }
+                        else
+                        {
+                            patchValue = desiredChange[setting];
+                            patchKey = setting;
+                            var fun = flowContext.get(setting + "-handler");
+                            if(fun !== undefined){
+                                fun(desiredChange[setting]);
+                                msg.payload = `Set desired prop (Cloud->Device): ${setting}: ${desiredChange[setting]}`;
+                                node.send(msg);
+                            }
                         }
                     }
+                }
+
+                // Error on update the device can only happen in the flow
+                // TODO: investigate if we can report here, for now only the success case.
+                if(patchValue != ""){
+                    var patch = {
+                        [patchKey]: {
+                            value: patchValue,
+                            ad: 'success',
+                            ac: 200,
+                            av: patchVersion
+                        }
+                    }
+                    
+                    node.log(`Patch: ${JSON.stringify(patch)}.`);
+
+                    // send the patch
+                    node.log(`Desired prop ${patchKey}, updating to Cloud.`);
+                    gTwin.properties.reported.update(patch, function(err) {
+                        node.log(err ? `error: ${err.toString()}` : `Desired prop ${patchKey}, updated to Cloud!` )
+                    });
                 }
             });
         };
