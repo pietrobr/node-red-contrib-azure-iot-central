@@ -3,7 +3,7 @@ This connector allows you easily connect your node red project to Azure IoT Cent
 
 This connector supports MQTT, AMQP, HTTP as transport. 
 
-You can send telemetry from your device to the cloud as json playload; the payload must match the one expected by IoT Central if you want to visualize it.
+You can send telemetry from your device to the cloud as json playload.You can look at the Raw data view to have a first look at the data received by IoT Central.
 
 ## Commands
 
